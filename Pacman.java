@@ -9,8 +9,8 @@ public class Pacman {
     private int index;
 
     public Pacman(){
-        x = 100;
-        y = 100;
+        x = 600;
+        y = 300;
         speed = 4.00;
         index = 0;
     }

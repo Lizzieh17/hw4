@@ -155,12 +155,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 			model.moveUp();
 			view.cameraUp();
 		}
-		for(int i = 0; i < model.getWalls().size(); i++){ 
-			Wall wall = model.getWalls().get(i);
-			if (wall.wallHit(model.getPacmanX(), model.getPacmanY()) == true){
-				System.out.println("Wall Removed");
-				model.getWalls().remove(wall);
-			}
-		}
+		// for(int i = 0; i < model.getWalls().size(); i++){ 
+		// 	Wall wall = model.getWalls().get(i);
+		// 	// if (wall.wallHit(model.getPacmanX(), model.getPacmanY()) == true){
+		// 	// 	System.out.println("Wall Removed");
+		// 	// 	model.getWalls().remove(wall);
+		// 	// }
+		// }
 	}
 }

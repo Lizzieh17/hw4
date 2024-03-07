@@ -38,7 +38,7 @@ public class View extends JPanel
 	}
 
 	public void paintComponent(Graphics g){
-		g.setColor(new Color(128, 255, 255));
+		g.setColor(new Color(25, 25, 25));
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		for(int i = 0; i < model.getWalls().size(); i++){
 			Wall wall = model.getWalls().get(i);

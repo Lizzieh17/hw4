@@ -18,8 +18,9 @@ public class Game extends JFrame
 		controller = new Controller(model);
 		view = new View(controller, model);
 		this.setTitle("Starting Pacman");
-		this.setSize(750, 750);
+		this.setSize(1200,600);
 		this.setFocusable(true);
+		this.setLocationRelativeTo(null);
 		this.getContentPane().add(view);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
