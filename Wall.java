@@ -3,8 +3,31 @@
  * 3/7/2024
  * Assignment 4 - Debuggers and Iterators
  */
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.Buffer;
+
+import javax.imageio.ImageIO;
+
 public class Wall {
     private int x, y, w, h;
+    private Image wall_image = null;
+    //make image
+
+    public Wall(){
+        x = 0;
+        y = 0;
+        w = 0;
+        h = 0;
+        // if(wall_image == null){
+        //     this.wall_image = View.loadImage("wall.png");
+        //     System.out.println("wall image loaded");
+        //     System.out.println(wall_image);
+        // }
+    }
 
     public Wall(int x, int y, int w, int h)
     {
@@ -22,12 +45,12 @@ public class Wall {
         return false;
     }
 
-    public boolean wallHit(int pacX, int pacY){
-        if ((pacX > x && pacX < (x + w)) && (pacY > y && pacY < (y + h))){
-            System.out.println("Wall Hit!");
-            return true;
-        }
-        return false;
+    public void drawWall(Graphics g, int scrollY){
+        // for(int i = 0; i < model.getWalls().size(); i++){
+		// 	Wall wall = model.getWalls().get(i);        
+		g.drawImage(wall_image, getX(), (getY() - scrollY), getW(), getH(), null);
+        // System.out.println("draw wall invoked");
+		//}
     }
 
     public void print(){
@@ -53,6 +76,13 @@ public class Wall {
     }
     public int getH(){
         return h;
+    }
+    public int getWallBottom(){
+        
+        return y + h;
+    }
+    public int getWallRight(){
+        return x + w;
     }
 
     @Override 

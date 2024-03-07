@@ -67,23 +67,17 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 	public void keyPressed(KeyEvent e)
 	{
 		char key = Character.toLowerCase(e.getKeyChar());
-		int key2 = e.getKeyCode();
 		//quit
-		if(key == 'q' || key2 == KeyEvent.VK_ESCAPE){
-			System.exit(0);
+		if(key == 'q'){
+			System.exit(1);
 		}
-		//scroll view
-		// switch(e.getKeyCode()){
-		// 	case KeyEvent.VK_UP: view.cameraUp(); break;
-		// 	case KeyEvent.VK_DOWN: view.cameraDown(); break;
-		// }
 		switch(e.getKeyCode())
 		{
 			case KeyEvent.VK_RIGHT: keyRight = true; break;
 			case KeyEvent.VK_LEFT: keyLeft = true; break;
 			case KeyEvent.VK_UP: keyUp = true; break;
 			case KeyEvent.VK_DOWN: keyDown = true; break;
-		}
+			case KeyEvent.VK_ESCAPE: System.exit(1);; break;		}
 	}
 
 	public void keyReleased(KeyEvent e)
@@ -141,19 +135,23 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 	public void update(){
 		if(keyRight){
 			model.moveRight();
+			model.arrowKeyPressed(2);
 		}
 		if(keyLeft){
 			model.moveLeft();
+			model.arrowKeyPressed(0);
 		}
 		if(keyDown){
 			//scroll down
 			model.moveDown();
 			view.cameraDown();
+			model.arrowKeyPressed(3);
 		}
 		if(keyUp){
 			//scroll up
 			model.moveUp();
 			view.cameraUp();
+			model.arrowKeyPressed(1);
 		}
 		// for(int i = 0; i < model.getWalls().size(); i++){ 
 		// 	Wall wall = model.getWalls().get(i);
