@@ -23,11 +23,11 @@ public class Pacman {
     private int MAX_DIRECTION = 4;
 
     public Pacman(){
-        x = 700;
-        y = 450;
+        x = 400;
+        y = 400;
         w = 30;
         h = 30;
-        speed = 4.00;
+        speed = 5.00;
         direction = 0;
         frame = 0;
         prevX = 0;

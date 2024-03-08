@@ -77,6 +77,9 @@ public class Wall {
     public int getH(){
         return h;
     }
+    public void setY(int y){
+        this.y = y;
+    }
     public int getWallBottom(){
         
         return y + h;

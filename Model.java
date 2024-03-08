@@ -23,29 +23,66 @@ public class Model
 		//pacman.update();
 	}
 
-	public void moveRight(){
-		int x = pacman.getPacX();
-		int speed = (int)pacman.getPacSpeed();
-		x += speed;
-		pacman.setPacX(x);
-	}
-	public void moveLeft(){
-		int x = pacman.getPacX();
-		int speed = (int)pacman.getPacSpeed();
-		x -= speed;
-		pacman.setPacX(x);
-	}
-	public void moveUp(){
-		int y = pacman.getPacY();
-		int speed = (int)pacman.getPacSpeed();
-		y -= speed;
-		pacman.setPacY(y);
-	}
-	public void moveDown(){
-		int y = pacman.getPacY();
-		int speed = (int)pacman.getPacSpeed();
-		y += speed;
-		pacman.setPacY(y);
+	// public void moveRight(){
+	// 	int x = pacman.getPacX();
+	// 	int speed = (int)pacman.getPacSpeed();
+	// 	x += speed;
+	// 	pacman.setPacX(x);
+	// }
+	// public void moveLeft(){
+	// 	int x = pacman.getPacX();
+	// 	int speed = (int)pacman.getPacSpeed();
+	// 	x -= speed;
+	// 	pacman.setPacX(x);
+	// }
+	// public void moveUp(){
+	// 	int y = pacman.getPacY();
+	// 	int speed = (int)pacman.getPacSpeed();
+	// 	y -= speed;
+	// 	pacman.setPacY(y);
+	// }
+	// public void moveDown(){
+	// 	int y = pacman.getPacY();
+	// 	int speed = (int)pacman.getPacSpeed();
+	// 	y += speed;
+	// 	pacman.setPacY(y);
+	// }
+	
+	public void movePacman(char direction){
+		if(direction == 'R'){
+			int x = pacman.getPacX();
+			if (x >= 775){
+				pacman.setPacX(4);
+			}
+			else{
+				int speed = (int)pacman.getPacSpeed();
+				x += speed;
+				pacman.setPacX(x);
+			}
+		}
+		if(direction == 'L'){
+			int x = pacman.getPacX();
+			if (x <= 4){
+				pacman.setPacX(775);
+			}
+			else{
+				int speed = (int)pacman.getPacSpeed();
+				x -= speed;
+				pacman.setPacX(x);
+			}
+		}
+		if(direction == 'U'){
+			int y = pacman.getPacY();
+			int speed = (int)pacman.getPacSpeed();
+			y -= speed;
+			pacman.setPacY(y);
+		}
+		if(direction == 'D'){
+			int y = pacman.getPacY();
+			int speed = (int)pacman.getPacSpeed();
+			y += speed;
+			pacman.setPacY(y);
+		}
 	}
 
 	public double getModelSpeed(){
@@ -59,6 +96,34 @@ public class Model
 	public Pacman getPacman(){
 		return pacman;
 	}
+
+	public int getLowestWallY(){
+		Wall wall = null;
+		int lowestY = 0;
+		for (int i = 0; i < getWalls().size(); i++){
+			wall = walls.get(i);
+			if (wall.getY() > lowestY){
+				lowestY = wall.getWallBottom();
+			}
+		}
+		//System.out.print("Lowest Wall Y: ");
+		//System.out.println(lowestY);
+		return lowestY;
+    }
+
+	public int getHighestWallY(){
+		Wall wall = null;
+		int highestY = 800;
+		for (int i = 0; i < getWalls().size(); i++){
+			wall = walls.get(i);
+			if (wall.getY() < highestY){
+				highestY = wall.getY();
+			}
+		}
+		// System.out.print("Highest Wall Y: ");
+		// System.out.println(highestY);
+		return highestY;
+    }
 
 	public boolean checkCollision(){
 		//y = head, x = left, bottom = toes, right = right
@@ -100,7 +165,22 @@ public class Model
 			// 	//pacman.getOutOfWall(wall.getX(), 'R','T');
 			// 	return true;
 			// }
-			//if (pacman.getPacRight() < wall.getX())
+			// if(pacman.getPacRight() < wall.getX()){
+			// 	return false;
+			// }
+			// else if(pacman.getPacX() > wall.getWallRight()){
+			// 	return false;
+			// }
+			// else if(pacman.getPacBottom() < wall.getY()){
+			// 	return false;
+			// }
+			// else if(pacman.getPacY()>wall.getWallBottom()){
+			// 	return false;
+			// }
+			// else{
+			// 	System.out.println("Collision");
+			// 	return true;
+			// }
 		}
 		return false;
 	}

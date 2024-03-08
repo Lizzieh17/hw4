@@ -50,6 +50,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 				if ((addWalls == false) && (wall.wallClicked(e.getX(), e.getY()) == true)){
 					System.out.println("Wall Removed");
 					model.getWalls().remove(wall);
+					wall.print();
 				}
 			}
 		}
@@ -127,38 +128,30 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 			case KeyEvent.VK_UP: keyUp = false; break;
 			case KeyEvent.VK_DOWN: keyDown = false; break;
 		}
-		//System.out.println(model.stringPac());
 	}
 
 	public void keyTyped(KeyEvent e){	}
 
 	public void update(){
 		if(keyRight){
-			model.moveRight();
+			model.movePacman('R');
 			model.arrowKeyPressed(2);
 		}
 		if(keyLeft){
-			model.moveLeft();
+			model.movePacman('L');
 			model.arrowKeyPressed(0);
 		}
 		if(keyDown){
 			//scroll down
-			model.moveDown();
+			model.movePacman('D');
 			view.cameraDown();
 			model.arrowKeyPressed(3);
 		}
 		if(keyUp){
 			//scroll up
-			model.moveUp();
+			model.movePacman('U');
 			view.cameraUp();
 			model.arrowKeyPressed(1);
 		}
-		// for(int i = 0; i < model.getWalls().size(); i++){ 
-		// 	Wall wall = model.getWalls().get(i);
-		// 	// if (wall.wallHit(model.getPacmanX(), model.getPacmanY()) == true){
-		// 	// 	System.out.println("Wall Removed");
-		// 	// 	model.getWalls().remove(wall);
-		// 	// }
-		// }
 	}
 }

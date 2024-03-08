@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 //import java.io.IOException;
 import java.io.File;
-import java.util.ArrayList;
 
 public class View extends JPanel
 {
@@ -19,7 +18,6 @@ public class View extends JPanel
 	private Model model;
 	private int scrollY = 0;
 	private Image wall_image;
-	//movve
 
 	public View(Controller c, Model m)
 	{
@@ -36,8 +34,7 @@ public class View extends JPanel
 		for(int i = 0; i < model.getWalls().size(); i++){
 			Wall wall = model.getWalls().get(i);
 			//wall.drawWall(g, this.scrollY);
-			g.drawImage(wall_image, wall.getX(), (wall.getY() - scrollY), wall.getW(), wall.getH(), null);
-
+			g.drawImage(wall_image, wall.getX(), (wall.getY() - (scrollY)), wall.getW(), wall.getH(), null);
 		}
 		model.getPacman().drawPac(g);
 	}
@@ -46,8 +43,8 @@ public class View extends JPanel
 		BufferedImage image = null;
 		try{
 			image = ImageIO.read(new File(filepath));
-			System.out.print("Imaged loaded: ");
-			System.out.println(filepath);
+			// System.out.print("Imaged loaded: ");
+			// System.out.println(filepath);
 		}
 		catch(Exception e){
 			e.printStackTrace(System.err);
@@ -56,13 +53,16 @@ public class View extends JPanel
 		}
 		return image;
 	}
+
 	public void cameraUp(){
-		//scrollY +=  model.getModelSpeed();
-		scrollY -=  4;
+		if(model.getHighestWallY() < (scrollY)){
+			scrollY -= 4;
+		}
 	}
 	
 	public void cameraDown(){
-		//scrollY += model.getModelSpeed();
-		scrollY +=  4;
+		if((model.getLowestWallY() - 760) > (scrollY)){
+			scrollY += 4;
+		}
 	}
 }
