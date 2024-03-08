@@ -22,31 +22,6 @@ public class Model
 	public void update(){
 		//pacman.update();
 	}
-
-	// public void moveRight(){
-	// 	int x = pacman.getPacX();
-	// 	int speed = (int)pacman.getPacSpeed();
-	// 	x += speed;
-	// 	pacman.setPacX(x);
-	// }
-	// public void moveLeft(){
-	// 	int x = pacman.getPacX();
-	// 	int speed = (int)pacman.getPacSpeed();
-	// 	x -= speed;
-	// 	pacman.setPacX(x);
-	// }
-	// public void moveUp(){
-	// 	int y = pacman.getPacY();
-	// 	int speed = (int)pacman.getPacSpeed();
-	// 	y -= speed;
-	// 	pacman.setPacY(y);
-	// }
-	// public void moveDown(){
-	// 	int y = pacman.getPacY();
-	// 	int speed = (int)pacman.getPacSpeed();
-	// 	y += speed;
-	// 	pacman.setPacY(y);
-	// }
 	
 	public void movePacman(char direction){
 		if(direction == 'R'){
@@ -127,8 +102,62 @@ public class Model
 
 	public boolean checkCollision(){
 		//y = head, x = left, bottom = toes, right = right
+		int pacHead = pacman.getPacY();
+		int pacLeft = pacman.getPacX();
+		int pacToes = pacman.getPacBottom();
+		int pacRight = pacman.getPacRight();
 		for (int i = 0; i < getWalls().size(); i++){
 			Wall wall = walls.get(i);
+			int wallTop = wall.getY();
+			int wallLeft = wall.getX();
+			int wallBottom = wall.getWallBottom();
+			int wallRight = wall.getWallRight();
+			if((pacHead > wallTop) && (pacHead < wallBottom) && (pacRight > wallLeft) && (pacRight < wallRight)){
+				//collision of pac's head nad right with wall's left and bottom
+				pacman.getOutOfWall(wall, 'L');
+			}
+			if(pacToes > wallTop && pacToes < wallBottom && pacRight > wallLeft && pacRight < wallRight){
+				//collision of pac's toes and right with wall's left and top
+			}
+			if(pacHead > wallTop && pacHead < wallBottom && pacLeft > wallLeft && pacLeft < wallRight){
+				//collision of pac's head and left with wall's right and bottom
+			}
+			if(pacToes > wallTop && pacToes < wallBottom && pacLeft > wallLeft && pacLeft < wallRight){
+				//collision of pac's toes and left with wall's right and top
+			}
+			if(pacLeft < wallLeft && pacRight > wallRight){
+				//collision vertically
+				pacman.getOutOfWall(wall, 'L');
+			}
+			if(pacHead < wallTop && pacToes > wallBottom){
+				//collision horizontially
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			// if((pacman.getPacY() > wall.getY())&&(pacman.getPacY() < wall.getWallBottom())&&(pacman.getPacRight() > wall.getX())&&(pacman.getPacRight() < wall.getWallRight())){
 			// 	//collision with pacmans head and righ side (with wall bottom and left)
 			// 	System.out.println("Collision head and right");

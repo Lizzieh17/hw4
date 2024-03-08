@@ -25,8 +25,8 @@ public class Pacman {
     public Pacman(){
         x = 400;
         y = 400;
-        w = 30;
-        h = 30;
+        w = 40;
+        h = 40;
         speed = 5.00;
         direction = 0;
         frame = 0;
@@ -68,17 +68,17 @@ public class Pacman {
         g.drawImage(currentImage, getPacX(), getPacY(), getPacW(), getPacH(), null);
     }
 
-    public void getOutOfWall(Wall wall, char wallHitX, char wallHitY){
-        //left collision
-        if((wallHitX == 'L')&&((prevX + w) <= wall.getX())){
-            setPacX(wall.getX() - w);
-            System.out.println("go back!");
-        }
-        //right collision
-        if((wallHitX == 'R')&&(prevX >= (wall.getX() + wall.getW()))){
-            setPacX(wall.getX() + wall.getW());
-            System.out.println("go back!");
-        }
+    public void getOutOfWall(Wall wall, char wallHitX){
+        //left wall collision
+        // if(wallHitX == 'L' && (prevX + w) <= wall.getX()){
+        //     setPacX(wall.getX() - w);
+        //     System.out.println("go back!");
+        // }
+        // //right collision
+        // if((wallHitX == 'R')&&(prevX >= (wall.getX() + wall.getW()))){
+        //     setPacX(wall.getX() + wall.getW());
+        //     System.out.println("go back!");
+        // }
     }
 
     public void update(){      }
@@ -101,23 +101,24 @@ public class Pacman {
     public int getPacRight(){
         return x+w;
     }
-
+    public int getPrevX(){
+        return prevX;
+    }
+    public int getPrevY(){
+        return prevY;
+    }
     public void setPacX(int x){
         prevX = this.x;
         this.x = x;
     }
     public void setPacY(int y){
         prevY = this.y;
+        // System.out.println("previously at: " + prevY);
         this.y = y;
+        // System.out.println("now at: " + this.y);
     }
     public double getPacSpeed(){
         return speed;
-    }
-    public Image getImage(){
-        return currentImage;
-    }
-    public int getDirection(){
-        return direction;
     }
 
     public void setImage(int d, int i){

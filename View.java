@@ -34,7 +34,7 @@ public class View extends JPanel
 		for(int i = 0; i < model.getWalls().size(); i++){
 			Wall wall = model.getWalls().get(i);
 			//wall.drawWall(g, this.scrollY);
-			g.drawImage(wall_image, wall.getX(), (wall.getY() - (scrollY)), wall.getW(), wall.getH(), null);
+			g.drawImage(wall_image, wall.getX(), (wall.getY() - scrollY), wall.getW(), wall.getH(), null);
 		}
 		model.getPacman().drawPac(g);
 	}
@@ -63,6 +63,10 @@ public class View extends JPanel
 	public void cameraDown(){
 		if((model.getLowestWallY() - 760) > (scrollY)){
 			scrollY += 4;
+			// for(int i = 0; i < model.getWalls().size(); i++){
+			// 	Wall wall = model.getWalls().get(i);
+			// 	wall.setY(wall.getY() + scrollY);
+			// }
 		}
 	}
 }
