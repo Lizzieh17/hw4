@@ -1,15 +1,11 @@
 /*
  * Lizzie Howell
- * 3/7/2024
+ * 3/9/2024
  * Assignment 4 - Map Editor
  */
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 public class Pacman {
     private int x, y, w, h;
@@ -63,23 +59,42 @@ public class Pacman {
         this.speed = 5;
     }
 
+    public void savePac(){
+        this.prevX = this.x;
+        this.prevY = this.y;
+    }
+
     public void drawPac(Graphics g){
         //System.out.println("draw pac invoked");
         g.drawImage(currentImage, getPacX(), getPacY(), getPacW(), getPacH(), null);
     }
 
-    public void getOutOfWall(Wall wall, char wallHitX){
-        //left wall collision
-        // if(wallHitX == 'L' && (prevX + w) <= wall.getX()){
-        //     setPacX(wall.getX() - w);
-        //     System.out.println("go back!");
-        // }
-        // //right collision
-        // if((wallHitX == 'R')&&(prevX >= (wall.getX() + wall.getW()))){
-        //     setPacX(wall.getX() + wall.getW());
-        //     System.out.println("go back!");
-        // }
+    public void getOutOfWall(Wall wall, int scrollY){        
+        if(((prevY + h) <= (wall.getY() + scrollY)) && (y + h <= wall.getY())){
+            if(((x+w) >= wall.getX()) && (prevX <= wall.getX())){
+                x = wall.getX() - w;
+            }
+            //right wall
+            else if((x <= (wall.getX() + wall.getW())) && (prevX >= (wall.getX() + wall.getW()))){
+                x = wall.getX() + wall.getW();
+            }
+            else {
+                y = wall.getY() - h - scrollY;
+            }
+        }
+        else if(((wall.getY() + wall.getH()) <= y) && (prevY >= (wall.getY() + wall.getH()))){
+            y = wall.getY() + wall.getH();
+        }
+        //left double check
+        else if(((x+w) >= wall.getX()) && (prevX <= wall.getX())){
+            x = wall.getX() - w;
+        }
+        //right wall double check
+        else if((x <= (wall.getX() + wall.getW())) && (prevX >= (wall.getX() + wall.getW()))){
+            x = wall.getX() + wall.getW();
+        }
     }
+
 
     public void update(){      }
 
@@ -95,27 +110,11 @@ public class Pacman {
     public int getPacW(){
         return w;
     }
-    public int getPacBottom(){
-        return y+h;
-    }
-    public int getPacRight(){
-        return x+w;
-    }
-    public int getPrevX(){
-        return prevX;
-    }
-    public int getPrevY(){
-        return prevY;
-    }
     public void setPacX(int x){
-        prevX = this.x;
         this.x = x;
     }
     public void setPacY(int y){
-        prevY = this.y;
-        // System.out.println("previously at: " + prevY);
         this.y = y;
-        // System.out.println("now at: " + this.y);
     }
     public double getPacSpeed(){
         return speed;
@@ -126,7 +125,7 @@ public class Pacman {
         this.frame = i;
         currentImage = pacmanImages[d][i];
     }
-    public void waka(int d){
+    public void animate(int d){
         direction = d;
         frame++;
         if (frame >= MAX_IMAGES){

@@ -1,32 +1,21 @@
 /*
  * Lizzie Howell
- * 3/7/2024
+ * 3/9/2024
  * Assignment 4 - Debuggers and Iterators
  */
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.Buffer;
-
-import javax.imageio.ImageIO;
 
 public class Wall {
     private int x, y, w, h;
-    private Image wall_image = null;
-    //make image
+    static Image wall_image = null;
 
     public Wall(){
         x = 0;
         y = 0;
         w = 0;
         h = 0;
-        // if(wall_image == null){
-        //     this.wall_image = View.loadImage("wall.png");
-        //     System.out.println("wall image loaded");
-        //     System.out.println(wall_image);
-        // }
     }
 
     public Wall(int x, int y, int w, int h)
@@ -34,23 +23,24 @@ public class Wall {
         this.x = x;
         this.y = y;
         this.w = w;
-        this.h = h;
+        this.h = h;  
     }
     
-    public boolean wallClicked(int mouseX, int mouseY){
+    public boolean wallClicked(int mouseX, int mouseY){	
         if ((mouseX > x && mouseX < (x + w)) && (mouseY > y && mouseY < (y + h))){
             System.out.println("Wall detected!");
+            print();
             return true;
         }
-        return false;
+            return false;
     }
 
-    public void drawWall(Graphics g, int scrollY){
-        // for(int i = 0; i < model.getWalls().size(); i++){
-		// 	Wall wall = model.getWalls().get(i);        
-		g.drawImage(wall_image, getX(), (getY() - scrollY), getW(), getH(), null);
-        // System.out.println("draw wall invoked");
-		//}
+    public void updateWallY(int scrollY){
+        this.y = this.y + scrollY;
+    }
+
+    public void drawWall(Graphics g, int scrollY){      
+		g.drawImage(wall_image, x, y - scrollY, w, h, null);
     }
 
     public void print(){
@@ -63,6 +53,16 @@ public class Wall {
         y = (int)ob.getLong("y");
         w = (int)ob.getLong("w");
         x = (int)ob.getLong("x");
+        
+        if(wall_image == null){
+            try{
+                wall_image = View.loadImage("wall.png");
+            }
+            catch(Exception e){
+                e.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
     }
 
     public int getX(){

@@ -1,12 +1,11 @@
 /*
  * Lizzie Howell
- * 3/7/2024
+ * 3/9/2024
  * Assignment 4 - Map Editor
  */
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 //import java.io.IOException;
@@ -14,18 +13,13 @@ import java.io.File;
 
 public class View extends JPanel
 {
-	//move
 	private Model model;
 	private int scrollY = 0;
-	private Image wall_image;
 
 	public View(Controller c, Model m)
 	{
 		model = m;
 		c.setView(this);
-		this.wall_image = loadImage("wall.png");
-            // System.out.println("wall image loaded");
-            // System.out.println(wall_image);
 	}
 
 	public void paintComponent(Graphics g){
@@ -33,8 +27,7 @@ public class View extends JPanel
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		for(int i = 0; i < model.getWalls().size(); i++){
 			Wall wall = model.getWalls().get(i);
-			//wall.drawWall(g, this.scrollY);
-			g.drawImage(wall_image, wall.getX(), (wall.getY() - scrollY), wall.getW(), wall.getH(), null);
+			wall.drawWall(g, scrollY);
 		}
 		model.getPacman().drawPac(g);
 	}
@@ -43,8 +36,6 @@ public class View extends JPanel
 		BufferedImage image = null;
 		try{
 			image = ImageIO.read(new File(filepath));
-			// System.out.print("Imaged loaded: ");
-			// System.out.println(filepath);
 		}
 		catch(Exception e){
 			e.printStackTrace(System.err);
@@ -56,17 +47,16 @@ public class View extends JPanel
 
 	public void cameraUp(){
 		if(model.getHighestWallY() < (scrollY)){
-			scrollY -= 4;
+			scrollY -= 5;
 		}
 	}
 	
 	public void cameraDown(){
 		if((model.getLowestWallY() - 760) > (scrollY)){
-			scrollY += 4;
-			// for(int i = 0; i < model.getWalls().size(); i++){
-			// 	Wall wall = model.getWalls().get(i);
-			// 	wall.setY(wall.getY() + scrollY);
-			// }
+			scrollY += 5;
 		}
+	}
+	public int getScrollY(){
+		return scrollY;
 	}
 }

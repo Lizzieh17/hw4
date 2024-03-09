@@ -1,6 +1,7 @@
+
 /*
  * Lizzie Howell
- * 3/7/2024
+ * 3/9/2024
  * Assignment 4 - Map Editor
  */
 import java.awt.event.MouseListener;
@@ -10,8 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 
-public class Controller implements ActionListener, MouseListener, KeyListener
-{
+public class Controller implements ActionListener, MouseListener, KeyListener {
 	private View view;
 	private Model model;
 	private boolean addWalls;
@@ -20,9 +20,9 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 	private boolean keyRight;
 	private boolean keyUp;
 	private boolean keyDown;
+	private boolean scrollable = true;
 
-	public Controller(Model m)
-	{
+	public Controller(Model m) {
 		model = m;
 		addWalls = false;
 		editMode = false;
@@ -32,126 +32,160 @@ public class Controller implements ActionListener, MouseListener, KeyListener
 		keyDown = false;
 	}
 
-	public void actionPerformed(ActionEvent e){
+	public void actionPerformed(ActionEvent e) {
 	}
 
-	void setView(View v){
+	void setView(View v) {
 		view = v;
 	}
 
-	public void mousePressed(MouseEvent e)
-	{
-		if (editMode == true){
-			if (addWalls == true){
+	public void mousePressed(MouseEvent e) {
+		if (editMode == true) {
+			if (addWalls == true) {
 				model.startWalls(e.getX(), e.getY());
 			}
-			for(int i = 0; i < model.getWalls().size(); i++){ 
+			for (int i = 0; i < model.getWalls().size(); i++) {
 				Wall wall = model.getWalls().get(i);
-				if ((addWalls == false) && (wall.wallClicked(e.getX(), e.getY()) == true)){
-					System.out.println("Wall Removed");
+				if ((addWalls == false) && (wall.wallClicked(e.getX(), (e.getY() + view.getScrollY())) == true)) {
 					model.getWalls().remove(wall);
-					wall.print();
 				}
 			}
 		}
 	}
 
-	public void mouseReleased(MouseEvent e) { 
-		if (addWalls == true && editMode == true){
-			model.stopWalls(e.getX(), e.getY());
+	public void mouseReleased(MouseEvent e) {
+		if (addWalls == true && editMode == true) {
+			model.stopWalls(e.getX(), e.getY(), view.getScrollY());
 		}
 	}
-	public void mouseEntered(MouseEvent e) {    }
-	public void mouseExited(MouseEvent e) {    }
-	public void mouseClicked(MouseEvent e) {  	}
 
-	public void keyPressed(KeyEvent e)
-	{
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void keyPressed(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
-		//quit
-		if(key == 'q'){
+		// quit
+		if (key == 'q') {
 			System.exit(1);
 		}
-		switch(e.getKeyCode())
-		{
-			case KeyEvent.VK_RIGHT: keyRight = true; break;
-			case KeyEvent.VK_LEFT: keyLeft = true; break;
-			case KeyEvent.VK_UP: keyUp = true; break;
-			case KeyEvent.VK_DOWN: keyDown = true; break;
-			case KeyEvent.VK_ESCAPE: System.exit(1);; break;		}
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+				keyRight = true;
+				break;
+			case KeyEvent.VK_LEFT:
+				keyLeft = true;
+				break;
+			case KeyEvent.VK_UP:
+				keyUp = true;
+				break;
+			case KeyEvent.VK_DOWN:
+				keyDown = true;
+				break;
+			case KeyEvent.VK_ESCAPE:
+				System.exit(1);
+				;
+				break;
+		}
 	}
 
-	public void keyReleased(KeyEvent e)
-	{
+	public void keyReleased(KeyEvent e) {
 		char key = Character.toLowerCase(e.getKeyChar());
 
-		//save
-		if(key == 's'){
+		// save
+		if (key == 's') {
 			model.save();
 		}
 
-		//load
-		if(key == 'l'){
+		// load
+		if (key == 'l') {
 			model.load();
 		}
 
-		//add walls or not
-		if(key == 'a'){
+		// add walls or not
+		if (key == 'a') {
 			addWalls = !addWalls;
 			System.out.println("Add walls is " + addWalls);
 		}
 
-		//enter editmode
-		if(key == 'e'){
+		// enter editmode
+		if (key == 'e') {
 			editMode = !editMode;
 			System.out.println("Edit mode is " + editMode);
-			if (addWalls == false){
+			if (addWalls == false) {
 				addWalls = true;
 				System.out.println("Add mode is " + addWalls);
 			}
 		}
 
-		//clear all walls
-		if(key == 'c'){
+		// clear all walls
+		if (key == 'c') {
 			if (model.getWalls().size() > 0) {
 				model.clearWalls();
 				System.out.println("Cleared all walls.");
-			}
-			else {
+			} else {
 				System.out.println("No Walls to clear.");
 			}
 		}
-		switch(e.getKeyCode())
-		{
-			case KeyEvent.VK_RIGHT: keyRight = false; break;
-			case KeyEvent.VK_LEFT: keyLeft = false; break;
-			case KeyEvent.VK_UP: keyUp = false; break;
-			case KeyEvent.VK_DOWN: keyDown = false; break;
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_RIGHT:
+				keyRight = false;
+				break;
+			case KeyEvent.VK_LEFT:
+				keyLeft = false;
+				break;
+			case KeyEvent.VK_UP:
+				keyUp = false;
+				break;
+			case KeyEvent.VK_DOWN:
+				keyDown = false;
+				break;
 		}
 	}
 
-	public void keyTyped(KeyEvent e){	}
+	public void keyTyped(KeyEvent e) {
+	}
 
-	public void update(){
-		if(keyRight){
+	public void update() {
+		model.getPacman().savePac();
+		if (keyRight) {
 			model.movePacman('R');
 			model.arrowKeyPressed(2);
 		}
-		if(keyLeft){
+		if (keyLeft) {
 			model.movePacman('L');
 			model.arrowKeyPressed(0);
 		}
-		if(keyDown){
-			//scroll down
+		if (keyDown) {
+			// scroll down
 			model.movePacman('D');
-			view.cameraDown();
+			if(scrollable){
+				view.cameraDown();
+			}
 			model.arrowKeyPressed(3);
 		}
-		if(keyUp){
-			//scroll up
+		if (keyUp) {
+			// scroll up
 			model.movePacman('U');
-			view.cameraUp();
+			if(scrollable){
+				view.cameraUp();
+			}			
 			model.arrowKeyPressed(1);
+		}
+		for(int i = 0; i < model.getWalls().size(); i++){
+			Wall wall = model.getWalls().get(i);
+			if(model.checkCollision(wall, view.getScrollY())){
+				//System.out.println("collision");
+				scrollable = false;
+			}
+			else {
+				scrollable = true;
+			}
 		}
 	}
 }
