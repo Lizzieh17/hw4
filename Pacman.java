@@ -83,7 +83,7 @@ public class Pacman {
             }
         }
         else if(((wall.getY() + wall.getH()) <= y) && (prevY >= (wall.getY() + wall.getH()))){
-            y = wall.getY() + wall.getH();
+            y = (wall.getY() - scrollY) + wall.getH();
         }
         //left double check
         else if(((x+w) >= wall.getX()) && (prevX <= wall.getX())){
