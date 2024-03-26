@@ -11,7 +11,8 @@ public class Model {
 	private ArrayList<Wall> walls;
 	private int begX, begY;
 	private Pacman pacman;
-
+	private boolean colliding;
+	
 	public Model() {
 		walls = new ArrayList<Wall>();
 		pacman = new Pacman();
@@ -21,97 +22,34 @@ public class Model {
 		// pacman.update();
 	}
 
-	public void movePacman(char direction) {
-		if (direction == 'R') {
-			int x = pacman.getPacX();
-			if (x >= 775) {
-				pacman.setPacX(4);
-			} else {
-				int speed = (int) pacman.getPacSpeed();
-				x += speed;
-				pacman.setPacX(x);
-			}
-		}
-		if (direction == 'L') {
-			int x = pacman.getPacX();
-			if (x <= 4) {
-				pacman.setPacX(775);
-			} else {
-				int speed = (int) pacman.getPacSpeed();
-				x -= speed;
-				pacman.setPacX(x);
-			}
-		}
-		if (direction == 'U') {
-			int y = pacman.getPacY();
-			int speed = (int) pacman.getPacSpeed();
-			y -= speed;
-			pacman.setPacY(y);
-		}
-		if (direction == 'D') {
-			int y = pacman.getPacY();
-			int speed = (int) pacman.getPacSpeed();
-			y += speed;
-			pacman.setPacY(y);
-		}
-	}
-
-	public double getModelSpeed() {
-		return pacman.getPacSpeed();
-	}
-
-	public ArrayList<Wall> getWalls() {
-		return walls;
-	}
-
-	public Pacman getPacman() {
-		return pacman;
-	}
-
-	public int getLowestWallY() {
-		Wall wall = null;
-		int lowestY = 0;
-		for (int i = 0; i < getWalls().size(); i++) {
-			wall = walls.get(i);
-			if (wall.getY() > lowestY) {
-				lowestY = wall.getWallBottom();
-			}
-		}
-		return lowestY;
-	}
-
-	public int getHighestWallY() {
-		Wall wall = null;
-		int highestY = 800;
-		for (int i = 0; i < getWalls().size(); i++) {
-			wall = walls.get(i);
-			if (wall.getY() < highestY) {
-				highestY = wall.getY();
-			}
-		}
-		return highestY;
-	}
-
-	public boolean checkCollision(Wall wall, int scrollY) {
+	public void checkCollision(int scrollY) {
 		// y = head, x = left, toes = y + h, right = x + w
 		int pacHead = pacman.getPacY();
 		int pacLeft = pacman.getPacX();
 		int pacToes = (pacman.getPacY() + pacman.getPacH());
 		int pacRight = (pacman.getPacX() + pacman.getPacW());
-		int wallTop = wall.getY() - scrollY;
-		int wallLeft = wall.getX();
-		int wallBottom = (wall.getY() - scrollY + wall.getH());
-		int wallRight = (wall.getX() + wall.getW());
+		colliding = false;
 
-		if (pacLeft < wallRight && pacRight > wallLeft && pacHead < wallBottom && pacToes > wallTop){
-			//System.out.println("colliding");
-			pacman.getOutOfWall(wall, scrollY);
-		}
-		else{
+		for(int i = 0; i<walls.size(); i++){
+			Wall wall = walls.get(i);
+			int wallTop = wall.getY();
+			int wallLeft = wall.getX();
+			int wallBottom = (wall.getY() + wall.getH());
+			int wallRight = (wall.getX() + wall.getW());
 
-			return false;
+			if((((pacHead < wallTop) && (pacToes > wallBottom)) || ((pacToes > wallTop) && (pacToes < wallBottom))) 
+			&& ((pacRight > wallLeft) && (pacLeft < wallRight)))
+			{
+				colliding = true;
+				pacman.getOutOfWall(scrollY);
+			}
+			if((((pacLeft > wallLeft) && (pacLeft < wallRight)) || ((pacRight > wallLeft) && (pacRight < wallRight))) 
+			&& ((pacToes > wallTop) && (pacHead < wallBottom)))
+			{
+				colliding = true;
+				pacman.getOutOfWall(scrollY);
+			}
 		}
-		return false;
 	}
 
 	// 0 = left; 1 = up; 2= right; 3 = down;
@@ -149,14 +87,14 @@ public class Model {
 			width = begX - newX;
 			begX = newX;
 		}
+		else if (newX > begX) {
+			width = newX - begX;
+		}
 		if (newY < begY) {
 			height = begY - newY;
 			begY = newY;
 		}
-		if (newX > begX) {
-			width = newX - begX;
-		}
-		if (newY > begY) {
+		else if (newY > begY) {
 			height = newY - begY;
 		}
 		// add the new wall
@@ -176,6 +114,45 @@ public class Model {
 			getWalls().remove(wall);
 			size--;
 		}
+	}
+
+	public boolean isColliding(){
+		return colliding;
+	}
+	public double getModelSpeed() {
+		return pacman.getPacSpeed();
+	}
+
+	public ArrayList<Wall> getWalls() {
+		return walls;
+	}
+
+	public Pacman getPacman() {
+		return pacman;
+	}
+
+	public int getLowestWallY() {
+		Wall wall = null;
+		int lowestY = 0;
+		for (int i = 0; i < getWalls().size(); i++) {
+			wall = walls.get(i);
+			if (wall.getY() > lowestY) {
+				lowestY = wall.getWallBottom();
+			}
+		}
+		return lowestY;
+	}
+
+	public int getHighestWallY() {
+		Wall wall = null;
+		int highestY = 800;
+		for (int i = 0; i < getWalls().size(); i++) {
+			wall = walls.get(i);
+			if (wall.getY() < highestY) {
+				highestY = wall.getY();
+			}
+		}
+		return highestY;
 	}
 
 	public void save() {
@@ -204,7 +181,6 @@ public class Model {
 	public void unmarshal(JSON ob) {
 		// System.out.println("unmarshal from model called.");
 		clearWalls();
-		walls = new ArrayList<Wall>();
 		JSON tmpList = ob.get("walls");
 		for (int i = 0; i < tmpList.size(); i++) {
 			Wall wall = new Wall(tmpList.get(i));

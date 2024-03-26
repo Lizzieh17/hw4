@@ -20,7 +20,6 @@ public class Game extends JFrame
 		this.setTitle("Starting Pacman");
 		this.setSize(800,800);
 		this.setFocusable(true);
-		this.setLocationRelativeTo(null);
 		this.getContentPane().add(view);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);

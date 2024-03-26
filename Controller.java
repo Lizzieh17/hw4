@@ -20,7 +20,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener {
 	private boolean keyRight;
 	private boolean keyUp;
 	private boolean keyDown;
-	private boolean scrollable = true;
 
 	public Controller(Model m) {
 		model = m;
@@ -152,40 +151,31 @@ public class Controller implements ActionListener, MouseListener, KeyListener {
 	}
 
 	public void update() {
-		model.getPacman().savePac();
 		if (keyRight) {
-			model.movePacman('R');
+			model.getPacman().savePac();
+			model.getPacman().movePacRight();
+			model.checkCollision(view.getScrollY());
 			model.arrowKeyPressed(2);
 		}
 		if (keyLeft) {
-			model.movePacman('L');
+			model.getPacman().savePac();
+			model.getPacman().movePacLeft();
+			model.checkCollision(view.getScrollY());
 			model.arrowKeyPressed(0);
 		}
 		if (keyDown) {
-			// scroll down
-			model.movePacman('D');
-			if(scrollable){
-				view.cameraDown();
-			}
+			model.getPacman().savePac();
+			model.getPacman().movePacDown();
+			model.checkCollision(view.getScrollY());
+			view.cameraDown();
 			model.arrowKeyPressed(3);
 		}
 		if (keyUp) {
-			// scroll up
-			model.movePacman('U');
-			if(scrollable){
-				view.cameraUp();
-			}			
+			model.getPacman().savePac();
+			model.getPacman().movePacUp();
+			model.checkCollision(view.getScrollY());
+			view.cameraUp();		
 			model.arrowKeyPressed(1);
-		}
-		for(int i = 0; i < model.getWalls().size(); i++){
-			Wall wall = model.getWalls().get(i);
-			if(model.checkCollision(wall, view.getScrollY())){
-				//System.out.println("collision");
-				scrollable = false;
-			}
-			else {
-				scrollable = true;
-			}
 		}
 	}
 }

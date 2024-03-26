@@ -26,8 +26,8 @@ public class Pacman {
         speed = 5.00;
         direction = 0;
         frame = 0;
-        prevX = 0;
-        prevY = 0;
+        prevX = 400;
+        prevY = 400;
         pacmanImages = new Image[MAX_DIRECTION][MAX_IMAGES];
         
         if(currentImage == null){
@@ -50,7 +50,6 @@ public class Pacman {
         }
     }
 
-//model has arraylist of walls a pacman, wallstart wallstop, could have scroll and one file wiht an iterator
     public Pacman(int x, int y){
         this.x = x;
         this.y = y;
@@ -60,43 +59,59 @@ public class Pacman {
     }
 
     public void savePac(){
-        this.prevX = this.x;
-        this.prevY = this.y;
+        prevX = x;
+        prevY = y;
     }
 
-    public void drawPac(Graphics g){
+    public void drawPac(Graphics g, int scrollY){
         //System.out.println("draw pac invoked");
-        g.drawImage(currentImage, getPacX(), getPacY(), getPacW(), getPacH(), null);
+        g.drawImage(currentImage, getPacX(), getPacY() - scrollY, getPacW(), getPacH(), null);
     }
 
-    public void getOutOfWall(Wall wall, int scrollY){        
-        if(((prevY + h) <= (wall.getY() + scrollY)) && (y + h <= wall.getY())){
-            if(((x+w) >= wall.getX()) && (prevX <= wall.getX())){
-                x = wall.getX() - w;
-            }
-            //right wall
-            else if((x <= (wall.getX() + wall.getW())) && (prevX >= (wall.getX() + wall.getW()))){
-                x = wall.getX() + wall.getW();
-            }
-            else {
-                y = wall.getY() - h - scrollY;
-            }
+    public void getOutOfWall(int scrollY){        
+        this.x = this.prevX;
+        this.y = this.prevY;
+    }
+
+    public void setImage(int d, int i){
+        this.direction = d;
+        this.frame = i;
+        currentImage = pacmanImages[d][i];
+    }
+    public void animate(int d){
+        direction = d;
+        frame++;
+        if (frame >= MAX_IMAGES){
+            frame = 0;
         }
-        else if(((wall.getY() + wall.getH()) <= y) && (prevY >= (wall.getY() + wall.getH()))){
-            y = (wall.getY() - scrollY) + wall.getH();
-        }
-        //left double check
-        else if(((x+w) >= wall.getX()) && (prevX <= wall.getX())){
-            x = wall.getX() - w;
-        }
-        //right wall double check
-        else if((x <= (wall.getX() + wall.getW())) && (prevX >= (wall.getX() + wall.getW()))){
-            x = wall.getX() + wall.getW();
-        }
+        setImage(direction, frame);
     }
 
 
-    public void update(){      }
+    public void movePacRight(){
+        prevX = x;
+        if (x >= 775) {
+            x = 4;
+        } else {
+            x += speed;
+        }
+    }
+    public void movePacLeft(){
+        prevX = x;
+        if (x <= 4) {
+            x = 775;
+        } else {
+            x -= speed;
+        }
+    }
+    public void movePacUp(){
+        prevY = y;
+        y -= speed;
+    }
+    public void movePacDown(){
+        prevY = y;
+        y += speed;
+    }
 
     public int getPacX(){
         return x;
@@ -120,22 +135,8 @@ public class Pacman {
         return speed;
     }
 
-    public void setImage(int d, int i){
-        this.direction = d;
-        this.frame = i;
-        currentImage = pacmanImages[d][i];
-    }
-    public void animate(int d){
-        direction = d;
-        frame++;
-        if (frame >= MAX_IMAGES){
-            frame = 0;
-        }
-        setImage(direction, frame);
-    }
-
     @Override 
     public String toString(){
-        return "Pacman (x,y) = (" + x + ", " + y + ")";
+        return "Pacman (x,y) = (" + x + ", " + y + ")" + ", Previous Pacman (x,y) = (" + prevX +" , " + prevY + " )";
     }
 }
